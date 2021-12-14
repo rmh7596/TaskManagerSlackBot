@@ -1,3 +1,5 @@
 .vscode/
 .env
 scratch.txt
+taskDatabase.db
+__pycache__
