@@ -15,3 +15,8 @@ def getTasks(fileName, userID):
     taskData = cursor.fetchall()
     connection.close()
     return taskData
+
+# Remove from db when task is marked as complete
+# Add reaction handling
+# Add reminders through direct messaging
+

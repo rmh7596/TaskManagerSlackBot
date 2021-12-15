@@ -1,5 +1,4 @@
 class Task:
-    DIVIDER = {'type' : 'divider'}
     def __init__(self, taskName) -> None:
         self.taskName = taskName
 
@@ -24,7 +23,7 @@ class Task:
 						"type": "plain_text",
 						"text": "Select a due date"
 					}
-				},
+				}
 			]
 		}
 
