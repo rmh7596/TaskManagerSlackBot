@@ -16,13 +16,20 @@ def getTasks(fileName, userID):
     connection.close()
     return taskData
 
+def getTasksByDate(fileName, date):
+    connection = sqlite3.connect(fileName)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Tasks WHERE dueDate=?", (date,))
+    taskData = cursor.fetchall()
+    connection.close()
+    return taskData
+
 def remove(fileName, ts):
     connection = sqlite3.connect(fileName)
     cursor = connection.cursor()
     cursor.execute("DELETE FROM Tasks WHERE timestamp=?", (ts,))
     connection.commit()
     connection.close()
-# Remove from db when task is marked as complete
-# Add reaction handling
+
 # Add reminders through direct messaging
 

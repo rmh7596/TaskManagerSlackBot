@@ -1,5 +1,7 @@
 from asyncio.windows_events import NULL
-from typing import Text
+from datetime import date
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 import slack 
 import os
 from pathlib import Path
@@ -52,6 +54,10 @@ def get_tasks():
     userID = rawData.get('user_id')
     tasks = database.getTasks(os.environ['DATABASE'], userID)
 
+    if (len(tasks) == 0):
+        client.chat_postMessage(channel='#development', text="You have :zero: tasks!")
+        return Response(), 200
+
     for i in range(len(tasks)):
         client.chat_postMessage(channel="#development", **taskDisplayView.displayTask(tasks[i]))
         time.sleep(2)
@@ -63,10 +69,19 @@ def get_tasks():
 def reactionAdded(payload):
     event = payload.get('event', {})
     channel_id = event.get('item', {}).get('channel')
-    timestamp = event.get('item', {}).get('ts')
-    database.remove(os.environ['DATABASE'], timestamp)
-    client.chat_delete(channel=channel_id, ts=timestamp)
+    current_timestamp = event.get('item', {}).get('ts')
+    if event.get('reaction') == 'white_check_mark':
+        database.remove(os.environ['DATABASE'], current_timestamp)
+        client.chat_delete(channel=channel_id, ts=current_timestamp)
 # Send reminders
 
+scheduler = BackgroundScheduler()
+@scheduler.scheduled_job(IntervalTrigger(seconds=10))
+def reminders():
+    # Every day at 8am, send a dm to people with tasks due that day
+    #today_tasks = database.getTasksByDate(os.environ['DATABASE'], date.today())
+    print("hello")
+
 if __name__ == "__main__":
+    scheduler.start()
     app.run(debug=True)
