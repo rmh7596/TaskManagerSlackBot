@@ -1,5 +1,6 @@
 .vscode/
 .env
+taskLog.log
 scratch.txt
 taskDatabase.db
 __pycache__

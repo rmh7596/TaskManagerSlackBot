@@ -1,0 +1,2 @@
+class databaseStorageError (Exception):
+    pass

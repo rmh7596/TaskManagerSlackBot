@@ -25,12 +25,22 @@ class Task:
 					}
 				}
 			]
-		}
+	}
+
+    def formatInstruction(self):
+        return {
+            "type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "React with :white_check_mark: when completed!"
+			}
+	}
 
     def getMessage(self):
         return {
             'blocks' : [
                 self.formatTaskName(),
-                self.formatDateSelector()
+                self.formatDateSelector(),
+				self.formatInstruction()
         ]
     }
