@@ -16,7 +16,6 @@ import taskDisplayView
 
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path, verbose=True)
-
 app = Flask(__name__)
 
 slack_event_adapter = SlackEventAdapter(os.environ['SIGNING_SECRET'],'/slack/events',app)
@@ -76,7 +75,7 @@ def reactionAdded(payload):
 # Send reminders
 
 scheduler = BackgroundScheduler()
-@scheduler.scheduled_job(IntervalTrigger(seconds=10))
+@scheduler.scheduled_job(IntervalTrigger(seconds=10), max_instances=1)
 def reminders():
     # Every day at 8am, send a dm to people with tasks due that day
     #today_tasks = database.getTasksByDate(os.environ['DATABASE'], date.today())
@@ -84,4 +83,4 @@ def reminders():
 
 if __name__ == "__main__":
     scheduler.start()
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
